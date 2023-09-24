@@ -9,14 +9,11 @@
 #include <DFRobot_DHT11.h>
 DFRobot_DHT11 DHT;
 
-//Block insecure private network requests 
+//DIFICULDADES 
 
-//dificuldades
-//descobrir qual pino liga as coisas (nenhum funcionava quando ligava o sensor dht, usei o rx, mas nao gravava se tivesse ligado kk)
-// fila trava ao colcoar a quantidade de elementos errada, e nao existe indicacao visual disso
-// impossivel conectar com react (erro de cors) (lib aleatoria chamada Access Control-Allow-Origin - Unblock)
-// https://randomnerdtutorials.com/esp32-websocket-server-arduino/
-
+// Descobrir qual pino conectar aos sensores (Nenhum funcionava quando conectei o sensor DHT; Usei o pino RX, mas ele não gravava quando estava ligado, haha).
+// A fila do sistema trava quando a quantidade de elementos é inserida incorretamente, e não há indicação visual para esse problema.
+// Conectar o sistema com o React devido a um erro de CORS (Cross-Origin Resource Sharing); Usei a extenção"Access Control-Allow-Origin - Unblock" para resolver
 
 //#DEFINES
 #define ledRed 16
@@ -31,6 +28,8 @@ const char *password = "996529424";
 
 float temperature, humidity, heartBeats = 0;
 
+//FUNCTIONS
+
 void wifiConnection() {
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
@@ -41,6 +40,7 @@ void wifiConnection() {
   Serial.print("Conectado!!! - ESP32: ");
   Serial.println(WiFi.localIP());
 }
+
 void initPins() {
   Serial.begin(115200);
   Serial.println("Hello, ESP32!");
@@ -49,15 +49,14 @@ void initPins() {
   pinMode(ledGreen, OUTPUT);
   pinMode(ledBlue, OUTPUT);
 
+  //define todos os leds como desligados
   digitalWrite(ledGreen, LOW);
   digitalWrite(ledGreen, LOW);
   digitalWrite(ledBlue, LOW);
 }
 
-
-//FUNCTIONS
-
 void getTemperatureAndHumidity() {
+  //Faz a leitura da temperatura e umidade
   DHT.read(dht11);
   temperature = DHT.temperature;
   humidity = DHT.humidity;
@@ -65,14 +64,14 @@ void getTemperatureAndHumidity() {
 
 void getHeartBeats() {
 
-  // Gere um valor simulado de ritmo cardíaco entre 60 e 100 batimentos por minuto
+  // Gera um valor simulado de ritmo cardíaco entre 60 e 100 batimentos por minuto
   int heartRate = random(60, 101);
 
-  // Calcule o período de um batimento cardíaco em milissegundos
+  // Calcula o período de um batimento cardíaco em milissegundos
   int heartbeatPeriod = 60000 / heartRate;
   Serial.println(heartbeatPeriod);
 
-  // Ligue o LED para simular um batimento cardíaco
+  // Liga o LED para simular um batimento cardíaco
   digitalWrite(ledRed, HIGH);
   vTaskDelay((heartbeatPeriod / 2) / portTICK_PERIOD_MS);  // Metade do período
   digitalWrite(ledRed, LOW);
@@ -101,16 +100,15 @@ void getSensorValues(void *arg) {
 
 void sendJson(void *arg) {
   while (1) {
-    // Crie um objeto JSON com os valores recebidos
 
-    // Route for serving JSON
     server.on("/json", HTTP_GET, [](AsyncWebServerRequest *request) {
+    // Cria um objeto JSON com os valores recebidos
       DynamicJsonDocument doc(1024);
       doc["bpm"] = heartBeats;
       doc["temperature"] = temperature;
       doc["humidity"] = humidity;
 
-      // Serialize JSON to a string
+      // Serializa JSON para string
       String jsonStr;
       serializeJson(doc, jsonStr);
 
@@ -119,7 +117,7 @@ void sendJson(void *arg) {
 
 
 
-    vTaskDelay(1000 / portTICK_PERIOD_MS);  // Envie a cada 5 segundos
+    vTaskDelay(1000 / portTICK_PERIOD_MS);  // Envia a cada 1 segundos
   }
 }
 

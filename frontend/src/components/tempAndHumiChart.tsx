@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import Chart from "react-apexcharts";
-import { Card } from "./card";
 
 export function TempAndHumiChart({
   temperature,
@@ -12,19 +11,12 @@ export function TempAndHumiChart({
   const config = {
     series: [
       {
-        name: "bpm",
         data: [temperature, humidity],
-        formatter: (value: number) => `${value} bpm`,
       },
     ],
     options: {
-      tooltip: {
-        y: {
-          formatter: (value: number) => `${value} bpm`,
-        },
-      },
-
       xaxis: {
+        categories: ["Temperatura", "Humidade"],
         labels: {
           show: false, // Desabilita as labels do eixo X (inferior)
         },
@@ -63,24 +55,22 @@ export function TempAndHumiChart({
         curve: "smooth",
       },
       title: {
-        text: "Temperatura e Umidade",
+        text: "Temperatura e Humidade",
         style: {
-          fontSize: "24px",
-          //   color: `blue`,
+          fontSize: "22px",
+          color: `black`,
         },
       },
     },
   };
 
   return (
-    <Card>
-      <Chart
-        className="w-full"
-        //@ts-ignore
-        options={config.options}
-        series={config.series}
-        type="bar"
-      />
-    </Card>
+    <Chart
+      className="w-full"
+      //@ts-ignore
+      options={config.options}
+      series={config.series}
+      type="bar"
+    />
   );
 }

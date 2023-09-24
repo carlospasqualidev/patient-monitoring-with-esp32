@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import Chart from "react-apexcharts";
-import { Card } from "./card";
 
 export function BPMChart({ bpmData }: { bpmData: number[] }) {
   const config = {
@@ -59,22 +58,20 @@ export function BPMChart({ bpmData }: { bpmData: number[] }) {
       title: {
         text: "Batimentos por minuto",
         style: {
-          fontSize: "24px",
-          //   color: `blue`,
+          fontSize: "22px",
+          color: `black`,
         },
       },
     },
   };
 
   return (
-    <Card>
-      <Chart
-        className="w-full"
-        //@ts-ignore
-        options={config.options}
-        series={config.series}
-        type="line"
-      />
-    </Card>
+    <Chart
+      className="w-full"
+      //@ts-ignore
+      options={config.options}
+      series={config.series}
+      type="line"
+    />
   );
 }
