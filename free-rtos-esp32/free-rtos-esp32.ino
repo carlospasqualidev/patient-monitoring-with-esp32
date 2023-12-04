@@ -9,12 +9,6 @@
 #include <DFRobot_DHT11.h>
 DFRobot_DHT11 DHT;
 
-//DIFICULDADES 
-
-// Descobrir qual pino conectar aos sensores (Nenhum funcionava quando conectei o sensor DHT; Usei o pino RX, mas ele não gravava quando estava ligado, haha).
-// A fila do sistema trava quando a quantidade de elementos é inserida incorretamente, e não há indicação visual para esse problema.
-// Conectar o sistema com o React devido a um erro de CORS (Cross-Origin Resource Sharing); Usei a extenção"Access Control-Allow-Origin - Unblock" para resolver
-
 //#DEFINES
 #define ledRed 16
 #define ledGreen 5
